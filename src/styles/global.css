@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-museum-bg: #ffffff;
+  --color-museum-text: #1a1a1a;
+  --color-museum-muted: #6b7280;
+  --color-museum-border: #e5e5e5;
+  --color-museum-accent: #2563eb;
+  --color-museum-gold: #b8860b;
+  --color-museum-cream: #faf8f5;
+
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-museum-text);
+    background: var(--color-museum-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: var(--color-museum-text);
+    color: var(--color-museum-bg);
+  }
+
+  /* Scroll snap for horizontal galleries */
+  .gallery-scroll {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .gallery-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-item {
+    scroll-snap-align: start;
+  }
+}
