@@ -1,0 +1,328 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'Donate Now' } = Astro.props;
+---
+
+<div class="sms-frame">
+  <div class="sms-body">
+    <!-- Status bar -->
+    <div class="sms-statusbar">
+      <span class="sms-time">9:41</span>
+      <div class="sms-status-icons">
+        <svg viewBox="0 0 17 12" width="13" height="9">
+          <rect x="0" y="8" width="3" height="4" rx="0.5" fill="#fff" />
+          <rect x="4.5" y="5" width="3" height="7" rx="0.5" fill="#fff" />
+          <rect x="9" y="2" width="3" height="10" rx="0.5" fill="#fff" />
+          <rect x="13.5" y="0" width="3" height="12" rx="0.5" fill="rgba(255,255,255,0.4)" />
+        </svg>
+        <svg viewBox="0 0 26 12" width="20" height="9">
+          <rect x="0" y="1" width="22" height="10" rx="2" stroke="#fff" stroke-width="1" fill="none" />
+          <rect x="2" y="3" width="14" height="6" rx="1" fill="#fff" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="sms-header">
+      <div class="sms-back">
+        <svg viewBox="0 0 12 16" width="10" height="14">
+          <path d="M8 2L3 8l5 6" stroke="#007AFF" stroke-width="2" fill="none" />
+        </svg>
+      </div>
+      <div class="sms-contact">
+        <div class="sms-avatar">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <circle cx="12" cy="9" r="4" fill="#fff" />
+            <path d="M4 22c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="#fff" />
+          </svg>
+        </div>
+        <div class="sms-contact-info">
+          <span class="sms-contact-name">{title}</span>
+          <span class="sms-contact-label">Short Code</span>
+        </div>
+      </div>
+      <div class="sms-info-btn">
+        <svg viewBox="0 0 16 16" width="16" height="16">
+          <circle cx="8" cy="8" r="7" stroke="#007AFF" stroke-width="1.2" fill="none" />
+          <text x="8" y="12" text-anchor="middle" font-size="10" fill="#007AFF" font-weight="500">i</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="sms-messages">
+      <div class="sms-timestamp">Today 2:45 PM</div>
+
+      <!-- Outgoing -->
+      <div class="sms-bubble sms-bubble-out">
+        <div class="sms-bubble-content sms-bubble-green">
+          <slot>
+            <span class="sms-text">GIVE 25</span>
+          </slot>
+        </div>
+      </div>
+
+      <!-- Incoming -->
+      <div class="sms-bubble sms-bubble-in">
+        <div class="sms-bubble-content sms-bubble-gray">
+          <span class="sms-text">Thank you! Your $25 donation has been received. Reply STOP to unsubscribe.</span>
+        </div>
+      </div>
+
+      <!-- Delivered label -->
+      <div class="sms-delivered">Delivered</div>
+    </div>
+
+    <!-- Input bar -->
+    <div class="sms-inputbar">
+      <div class="sms-plus-btn">
+        <svg viewBox="0 0 16 16" width="18" height="18">
+          <circle cx="8" cy="8" r="7.5" fill="#007AFF" />
+          <path d="M8 4v8M4 8h8" stroke="#fff" stroke-width="1.5" />
+        </svg>
+      </div>
+      <div class="sms-input">
+        <span>Text Message</span>
+      </div>
+      <div class="sms-send-btn">
+        <svg viewBox="0 0 20 20" width="18" height="18">
+          <circle cx="10" cy="10" r="9" fill="#007AFF" />
+          <path d="M10 14V7M7 9l3-3 3 3" stroke="#fff" stroke-width="1.5" fill="none" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Home indicator -->
+    <div class="sms-home-area">
+      <div class="sms-home-bar"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sms-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .sms-body {
+    width: 100%;
+    background: #000;
+    border-radius: 24px;
+    padding: 3px;
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.3),
+      0 8px 40px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+
+  /* Status bar */
+  .sms-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px 4px;
+    background: #f2f2f7;
+    border-radius: 22px 22px 0 0;
+  }
+
+  .sms-time {
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  .sms-status-icons {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sms-status-icons svg {
+    color: #1a1a1a;
+  }
+
+  .sms-status-icons svg rect,
+  .sms-status-icons svg path {
+    fill: #1a1a1a;
+    stroke: #1a1a1a;
+  }
+
+  /* Header */
+  .sms-header {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px 8px;
+    background: #f2f2f7;
+    border-bottom: 0.5px solid #c6c6c8;
+    gap: 8px;
+  }
+
+  .sms-back {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .sms-contact {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sms-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #c7c7cc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .sms-contact-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sms-contact-name {
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.2;
+  }
+
+  .sms-contact-label {
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    font-size: 10px;
+    color: #8e8e93;
+    line-height: 1.2;
+  }
+
+  .sms-info-btn {
+    flex-shrink: 0;
+  }
+
+  /* Messages area */
+  .sms-messages {
+    background: #fff;
+    padding: 12px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sms-timestamp {
+    text-align: center;
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    font-size: 10px;
+    color: #8e8e93;
+    margin-bottom: 4px;
+  }
+
+  .sms-bubble {
+    display: flex;
+  }
+
+  .sms-bubble-out {
+    justify-content: flex-end;
+  }
+
+  .sms-bubble-in {
+    justify-content: flex-start;
+  }
+
+  .sms-bubble-content {
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 18px;
+    line-height: 1.35;
+  }
+
+  .sms-bubble-green {
+    background: #34c759;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+
+  .sms-bubble-gray {
+    background: #e9e9eb;
+    color: #1a1a1a;
+    border-bottom-left-radius: 4px;
+  }
+
+  .sms-text {
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .sms-delivered {
+    text-align: right;
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    font-size: 10px;
+    color: #8e8e93;
+    margin-top: 2px;
+  }
+
+  /* Input bar */
+  .sms-inputbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: #f2f2f7;
+    border-top: 0.5px solid #c6c6c8;
+  }
+
+  .sms-plus-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .sms-input {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #c6c6c8;
+    border-radius: 18px;
+    padding: 6px 12px;
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    font-size: 14px;
+    color: #8e8e93;
+  }
+
+  .sms-send-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Home indicator */
+  .sms-home-area {
+    background: #f2f2f7;
+    padding: 6px 0 4px;
+    display: flex;
+    justify-content: center;
+    border-radius: 0 0 22px 22px;
+  }
+
+  .sms-home-bar {
+    width: 36%;
+    height: 4px;
+    background: #1a1a1a;
+    border-radius: 2px;
+    opacity: 0.2;
+  }
+</style>

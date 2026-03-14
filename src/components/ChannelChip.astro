@@ -1,0 +1,73 @@
+---
+interface Props {
+  channel: string;
+  active?: boolean;
+}
+
+const { channel, active = false } = Astro.props;
+
+const channelLabels: Record<string, string> = {
+  'direct-mail': 'Direct Mail',
+  'newspaper': 'Newspaper',
+  'tv': 'Television',
+  'radio': 'Radio',
+  'email': 'Email',
+  'web': 'Web',
+  'social': 'Social Media',
+  'mobile': 'Mobile',
+  'sms': 'Text/SMS',
+  'p2p': 'Peer-to-Peer',
+  'events': 'Events',
+  'crowdfunding': 'Crowdfunding',
+  'digital': 'Digital',
+  'print': 'Print',
+  'telefundraising': 'Telefundraising',
+};
+
+const label = channelLabels[channel] || channel;
+---
+
+<span
+  class:list={['channel-chip', { 'channel-chip-active': active }]}
+  data-channel={channel}
+>
+  {label}
+</span>
+
+<style>
+  .channel-chip {
+    display: inline-block;
+    padding: 2px 8px;
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-museum-muted);
+    background: transparent;
+    border: 1px solid var(--color-museum-border);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .channel-chip:hover {
+    color: var(--color-museum-text);
+    border-color: var(--color-museum-text);
+    background: rgba(26, 26, 26, 0.03);
+  }
+
+  .channel-chip-active {
+    color: #fff;
+    background: var(--color-museum-text);
+    border-color: var(--color-museum-text);
+  }
+
+  .channel-chip-active:hover {
+    color: #fff;
+    background: #333;
+    border-color: #333;
+  }
+</style>

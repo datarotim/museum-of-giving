@@ -1,0 +1,134 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`gallery-wrapper ${className}`}>
+  <button class="gallery-arrow gallery-arrow-left" aria-label="Scroll left" data-gallery-arrow="left">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M15 18l-6-6 6-6" />
+    </svg>
+  </button>
+
+  <div class="gallery-scroll gallery-track">
+    <slot />
+  </div>
+
+  <button class="gallery-arrow gallery-arrow-right" aria-label="Scroll right" data-gallery-arrow="right">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 18l6-6-6-6" />
+    </svg>
+  </button>
+</div>
+
+<style>
+  .gallery-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .gallery-track {
+    display: flex;
+    gap: 24px;
+    padding: 16px 40px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .gallery-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Arrow overlays */
+  .gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--color-museum-border);
+    color: var(--color-museum-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .gallery-wrapper:hover .gallery-arrow {
+    opacity: 1;
+  }
+
+  .gallery-arrow:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .gallery-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .gallery-arrow-left {
+    left: 4px;
+  }
+
+  .gallery-arrow-right {
+    right: 4px;
+  }
+
+  /* Hide arrows on touch devices */
+  @media (hover: none) {
+    .gallery-arrow {
+      display: none;
+    }
+
+    .gallery-track {
+      padding: 16px 20px;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.gallery-wrapper').forEach((wrapper) => {
+    const track = wrapper.querySelector('.gallery-track') as HTMLElement;
+    const leftBtn = wrapper.querySelector('[data-gallery-arrow="left"]') as HTMLElement;
+    const rightBtn = wrapper.querySelector('[data-gallery-arrow="right"]') as HTMLElement;
+
+    if (!track || !leftBtn || !rightBtn) return;
+
+    const scrollAmount = 340;
+
+    leftBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    rightBtn.addEventListener('click', () => {
+      track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+
+    // Show/hide arrows based on scroll position
+    const updateArrows = () => {
+      const atStart = track.scrollLeft <= 10;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 10;
+      leftBtn.style.visibility = atStart ? 'hidden' : 'visible';
+      rightBtn.style.visibility = atEnd ? 'hidden' : 'visible';
+    };
+
+    track.addEventListener('scroll', updateArrows, { passive: true });
+    updateArrows();
+
+    // Re-check on resize
+    const observer = new ResizeObserver(updateArrows);
+    observer.observe(track);
+  });
+</script>

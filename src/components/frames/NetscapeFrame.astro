@@ -1,0 +1,315 @@
+---
+interface Props {
+  url?: string;
+  title?: string;
+}
+
+const { url = 'http://www.example.org/', title = 'Netscape' } = Astro.props;
+---
+
+<div class="ns-frame">
+  <!-- Title bar -->
+  <div class="ns-titlebar">
+    <div class="ns-titlebar-icon">
+      <div class="ns-n-icon">N</div>
+    </div>
+    <div class="ns-titlebar-text">{title} - Netscape</div>
+    <div class="ns-titlebar-buttons">
+      <div class="ns-titlebar-btn">_</div>
+      <div class="ns-titlebar-btn ns-titlebar-btn-max">
+        <div class="ns-btn-square"></div>
+      </div>
+      <div class="ns-titlebar-btn ns-titlebar-btn-close">X</div>
+    </div>
+  </div>
+
+  <!-- Menu bar -->
+  <div class="ns-menubar">
+    <span>File</span>
+    <span>Edit</span>
+    <span>View</span>
+    <span>Go</span>
+    <span>Communicator</span>
+    <span>Help</span>
+  </div>
+
+  <!-- Navigation toolbar -->
+  <div class="ns-toolbar">
+    <div class="ns-toolbar-buttons">
+      <div class="ns-tool-btn">
+        <div class="ns-tool-icon">&#9664;</div>
+        <div class="ns-tool-label">Back</div>
+      </div>
+      <div class="ns-tool-btn">
+        <div class="ns-tool-icon">&#9654;</div>
+        <div class="ns-tool-label">Forward</div>
+      </div>
+      <div class="ns-tool-btn">
+        <div class="ns-tool-icon">&#8635;</div>
+        <div class="ns-tool-label">Reload</div>
+      </div>
+      <div class="ns-tool-btn">
+        <div class="ns-tool-icon">&#8962;</div>
+        <div class="ns-tool-label">Home</div>
+      </div>
+      <div class="ns-tool-btn">
+        <div class="ns-tool-icon">&#128270;</div>
+        <div class="ns-tool-label">Search</div>
+      </div>
+      <div class="ns-tool-btn">
+        <div class="ns-tool-icon">&#128206;</div>
+        <div class="ns-tool-label">Guide</div>
+      </div>
+      <div class="ns-tool-btn">
+        <div class="ns-tool-icon">&#128424;</div>
+        <div class="ns-tool-label">Print</div>
+      </div>
+    </div>
+    <div class="ns-throbber">
+      <div class="ns-throbber-n">N</div>
+    </div>
+  </div>
+
+  <!-- Location bar -->
+  <div class="ns-location">
+    <span class="ns-location-label">Location:</span>
+    <div class="ns-location-input">
+      <span>{url}</span>
+    </div>
+  </div>
+
+  <!-- Content area -->
+  <div class="ns-content">
+    <slot />
+  </div>
+
+  <!-- Status bar -->
+  <div class="ns-statusbar">
+    <div class="ns-status-text">Document: Done</div>
+    <div class="ns-status-lock">
+      <svg viewBox="0 0 12 14" width="10" height="12">
+        <rect x="1" y="6" width="10" height="7" rx="1" fill="#888" />
+        <path d="M3 6V4a3 3 0 016 0v2" stroke="#888" stroke-width="1.5" fill="none" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ns-frame {
+    width: 100%;
+    border: 2px outset #dfdfdf;
+    background: #c0c0c0;
+    font-family: 'MS Sans Serif', 'Tahoma', 'Arial', sans-serif;
+    font-size: 11px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Title bar */
+  .ns-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 3px;
+    background: linear-gradient(90deg, #000080, #1084d0);
+    color: #fff;
+    font-weight: bold;
+    font-size: 11px;
+  }
+
+  .ns-titlebar-icon {
+    flex-shrink: 0;
+  }
+
+  .ns-n-icon {
+    width: 14px;
+    height: 14px;
+    background: linear-gradient(135deg, #00aa00, #008800);
+    color: #fff;
+    font-size: 9px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1px;
+  }
+
+  .ns-titlebar-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ns-titlebar-buttons {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .ns-titlebar-btn {
+    width: 16px;
+    height: 14px;
+    background: #c0c0c0;
+    border: 1px outset #dfdfdf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: bold;
+    color: #000;
+    line-height: 1;
+  }
+
+  .ns-titlebar-btn-close {
+    background: #c0c0c0;
+  }
+
+  .ns-btn-square {
+    width: 8px;
+    height: 6px;
+    border: 1.5px solid #000;
+    border-top-width: 2px;
+  }
+
+  /* Menu bar */
+  .ns-menubar {
+    display: flex;
+    gap: 0;
+    padding: 1px 4px;
+    background: #c0c0c0;
+    border-bottom: 1px solid #808080;
+    font-size: 11px;
+    color: #000;
+  }
+
+  .ns-menubar span {
+    padding: 1px 6px;
+  }
+
+  /* Toolbar */
+  .ns-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 3px 4px;
+    background: #c0c0c0;
+    border-bottom: 1px solid #808080;
+    gap: 2px;
+  }
+
+  .ns-toolbar-buttons {
+    display: flex;
+    gap: 1px;
+    flex: 1;
+  }
+
+  .ns-tool-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    cursor: default;
+    min-width: 28px;
+  }
+
+  .ns-tool-icon {
+    font-size: 12px;
+    line-height: 1;
+    color: #333;
+  }
+
+  .ns-tool-label {
+    font-size: 8px;
+    color: #000;
+    margin-top: 1px;
+  }
+
+  .ns-throbber {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px inset #c0c0c0;
+    background: #000;
+  }
+
+  .ns-throbber-n {
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(180deg, #00cc00, #008800);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Location bar */
+  .ns-location {
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    background: #c0c0c0;
+    border-bottom: 1px solid #808080;
+    gap: 4px;
+  }
+
+  .ns-location-label {
+    font-size: 11px;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .ns-location-input {
+    flex: 1;
+    background: #fff;
+    border: 2px inset #c0c0c0;
+    padding: 1px 4px;
+    font-size: 11px;
+    color: #000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Content */
+  .ns-content {
+    background: #fff;
+    min-height: 60px;
+    line-height: 0;
+    border: 2px inset #c0c0c0;
+    margin: 2px;
+    overflow: hidden;
+  }
+
+  .ns-content :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Status bar */
+  .ns-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1px 4px;
+    background: #c0c0c0;
+    border-top: 1px solid #dfdfdf;
+    font-size: 10px;
+    color: #000;
+  }
+
+  .ns-status-text {
+    flex: 1;
+    border: 1px inset #c0c0c0;
+    padding: 0 4px;
+  }
+
+  .ns-status-lock {
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+  }
+</style>

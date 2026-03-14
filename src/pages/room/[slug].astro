@@ -1,0 +1,159 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SubmitCTA from '../../components/SubmitCTA.astro';
+import Footer from '../../components/Footer.astro';
+import { rooms, getRoomBySlug } from '../../data/rooms';
+import { channels, getChannelBySlug } from '../../data/channels';
+import { getCollection } from 'astro:content';
+import HorizontalGallery from '../../components/HorizontalGallery.astro';
+import ExhibitCard from '../../components/ExhibitCard.astro';
+import Lightbox from '../../components/Lightbox.tsx';
+
+export async function getStaticPaths() {
+  const allExhibits = await getCollection('exhibits');
+
+  const roomPaths = rooms.map((room) => ({
+    params: { slug: room.slug },
+    props: {
+      type: 'room' as const,
+      room,
+      exhibits: allExhibits
+        .filter((e) => e.data.room === room.slug)
+        .sort((a, b) => a.data.year - b.data.year),
+    },
+  }));
+
+  const channelPaths = channels.map((channel) => ({
+    params: { slug: channel.slug },
+    props: {
+      type: 'channel' as const,
+      channel,
+      exhibits: allExhibits
+        .filter((e) => e.data.channels.includes(channel.slug as any))
+        .sort((a, b) => a.data.year - b.data.year),
+    },
+  }));
+
+  return [...roomPaths, ...channelPaths];
+}
+
+type Props =
+  | { type: 'room'; room: (typeof rooms)[number]; exhibits: any[]; channel?: never }
+  | { type: 'channel'; channel: (typeof channels)[number]; exhibits: any[]; room?: never };
+
+const { type, room, channel, exhibits } = Astro.props;
+
+const title = type === 'room' ? room!.title : channel!.label;
+const era = type === 'room' ? room!.era : undefined;
+const description = type === 'room' ? room!.description : channel!.description;
+const pageTitle = `${title} — Museum of Giving`;
+
+const lightboxExhibits = JSON.stringify(
+  exhibits.map((e: any) => ({
+    slug: e.id,
+    title: e.data.title,
+    org: e.data.org,
+    year: e.data.year,
+    image: e.data.image,
+    notable: e.data.notable,
+    channels: e.data.channels,
+    sourceUrl: e.data.sourceUrl,
+    sourceAttribution: e.data.sourceAttribution,
+  }))
+);
+---
+
+<Layout title={pageTitle} description={description}>
+  <main class="max-w-7xl mx-auto px-6">
+    <!-- Back link -->
+    <nav class="pt-8 pb-4">
+      <a
+        href="/"
+        class="text-museum-muted text-sm hover:text-museum-text transition-colors inline-flex items-center gap-1"
+      >
+        <span>&larr;</span> Museum
+      </a>
+    </nav>
+
+    <!-- Room header -->
+    <header class="pb-12 pt-4 max-w-3xl">
+      {era && (
+        <span class="block font-mono text-xs text-museum-muted tracking-widest uppercase mb-3">
+          {era}
+        </span>
+      )}
+      <h1 class="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6">
+        {title}
+      </h1>
+      <p class="text-museum-muted text-lg sm:text-xl italic leading-relaxed">
+        {description}
+      </p>
+    </header>
+
+    <!-- Channel filter chips -->
+    <div class="flex flex-wrap gap-2 mb-10">
+      {channels.map((ch) => {
+        const isActive =
+          type === 'channel' && channel!.slug === ch.slug;
+        return (
+          <a
+            href={`/room/${ch.slug}`}
+            class:list={[
+              'inline-block px-4 py-1.5 rounded-full text-xs font-medium border transition-colors',
+              isActive
+                ? 'bg-museum-text text-white border-museum-text'
+                : 'border-museum-border text-museum-muted hover:border-museum-text hover:text-museum-text',
+            ]}
+          >
+            {ch.label}
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- Gallery -->
+    {exhibits.length > 0 ? (
+      <HorizontalGallery>
+        {exhibits.map((exhibit) => (
+          <ExhibitCard exhibit={exhibit} />
+        ))}
+      </HorizontalGallery>
+    ) : (
+      <div class="py-20 text-center">
+        <p class="text-museum-muted text-lg">No exhibits yet in this collection.</p>
+        <p class="text-museum-muted text-sm mt-2">
+          <a href="/submit" class="underline hover:text-museum-text">Submit one?</a>
+        </p>
+      </div>
+    )}
+
+    <!-- Submit CTA -->
+    <div class="py-16">
+      <SubmitCTA />
+    </div>
+  </main>
+
+  <Footer />
+
+  <!-- Lightbox overlay -->
+  <Lightbox client:load exhibits={lightboxExhibits} initialIndex={0} />
+
+  <script>
+    // Wire exhibit card clicks to lightbox
+    document.querySelectorAll('.exhibit-card').forEach((card, index) => {
+      card.addEventListener('click', () => {
+        if ((window as any).__lightboxOpen) {
+          (window as any).__lightboxOpen(index);
+        }
+      });
+      card.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          e.preventDefault();
+          if ((window as any).__lightboxOpen) {
+            (window as any).__lightboxOpen(index);
+          }
+        }
+      });
+    });
+  </script>
+</Layout>

@@ -1,0 +1,296 @@
+---
+interface Props {
+  url?: string;
+  title?: string;
+}
+
+const { url = 'http://www.example.org/', title = 'Mozilla Firefox' } = Astro.props;
+---
+
+<div class="ff-frame">
+  <!-- Tab bar -->
+  <div class="ff-tabbar">
+    <div class="ff-tab ff-tab-active">
+      <div class="ff-tab-icon">
+        <div class="ff-fox-icon">
+          <svg viewBox="0 0 16 16" width="14" height="14">
+            <circle cx="8" cy="8" r="7" fill="#3b7dd8" />
+            <path d="M4 5c1-2 3-2.5 4.5-2 1 .3 2.5 1.5 3.5 3.5s0 4-1 5-3 1.5-4.5 1c-2-.7-3-2.5-3-4s.5-2.5.5-3.5z" fill="#ff9500" />
+            <path d="M5 5.5c.5-1 2-1.5 3-1 1.5.5 2.5 2 2.5 3.5s-1 3-2.5 3-2.5-1-3-2c-.5-1.5 0-2.5 0-3.5z" fill="#ffbd4f" />
+          </svg>
+        </div>
+      </div>
+      <span class="ff-tab-title">{title}</span>
+      <div class="ff-tab-close">&#10005;</div>
+    </div>
+    <div class="ff-new-tab">+</div>
+    <div class="ff-tabbar-space"></div>
+    <div class="ff-window-buttons">
+      <div class="ff-win-btn ff-win-min">&#8211;</div>
+      <div class="ff-win-btn ff-win-max">&#9634;</div>
+      <div class="ff-win-btn ff-win-close">&#10005;</div>
+    </div>
+  </div>
+
+  <!-- Navigation bar -->
+  <div class="ff-navbar">
+    <div class="ff-nav-buttons">
+      <div class="ff-nav-btn">&#9664;</div>
+      <div class="ff-nav-btn ff-nav-disabled">&#9654;</div>
+      <div class="ff-nav-btn">&#8635;</div>
+      <div class="ff-nav-btn">&#9744;</div>
+    </div>
+    <div class="ff-urlbar">
+      <div class="ff-urlbar-icon">
+        <svg viewBox="0 0 12 14" width="10" height="12">
+          <rect x="1" y="1" width="10" height="12" rx="1" fill="#fff" stroke="#bbb" stroke-width="0.8" />
+          <line x1="3" y1="4" x2="9" y2="4" stroke="#4a90d9" stroke-width="0.6" />
+          <line x1="3" y1="6" x2="9" y2="6" stroke="#4a90d9" stroke-width="0.6" />
+          <line x1="3" y1="8" x2="7" y2="8" stroke="#4a90d9" stroke-width="0.6" />
+        </svg>
+      </div>
+      <span class="ff-url-text">{url}</span>
+    </div>
+    <div class="ff-searchbar">
+      <div class="ff-search-icon">
+        <svg viewBox="0 0 16 16" width="12" height="12">
+          <text x="1" y="12" font-size="12" fill="#dd4b39" font-weight="bold" font-family="serif">G</text>
+        </svg>
+      </div>
+      <span class="ff-search-text">Google</span>
+    </div>
+  </div>
+
+  <!-- Bookmarks bar -->
+  <div class="ff-bookmarks">
+    <span class="ff-bm-item">Bookmarks Toolbar</span>
+  </div>
+
+  <!-- Content -->
+  <div class="ff-content">
+    <slot />
+  </div>
+
+  <!-- Status bar -->
+  <div class="ff-statusbar">
+    <span>Done</span>
+  </div>
+</div>
+
+<style>
+  .ff-frame {
+    width: 100%;
+    background: #e8e6df;
+    border: 1px solid #8e8e8e;
+    border-radius: 6px 6px 0 0;
+    font-family: 'Lucida Grande', 'Segoe UI', 'Tahoma', sans-serif;
+    font-size: 11px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+  }
+
+  /* Tab bar */
+  .ff-tabbar {
+    display: flex;
+    align-items: flex-end;
+    padding: 4px 4px 0;
+    background: linear-gradient(180deg, #d4d0c8, #c8c4bc);
+    gap: 0;
+  }
+
+  .ff-tab {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: linear-gradient(180deg, #f6f4ef, #e8e6df);
+    border: 1px solid #8e8e8e;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    max-width: 180px;
+    min-width: 0;
+  }
+
+  .ff-tab-active {
+    background: #e8e6df;
+    position: relative;
+    z-index: 1;
+    margin-bottom: -1px;
+    padding-bottom: 5px;
+  }
+
+  .ff-tab-icon {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+  }
+
+  .ff-tab-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11px;
+    color: #000;
+  }
+
+  .ff-tab-close {
+    flex-shrink: 0;
+    font-size: 9px;
+    color: #666;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+  }
+
+  .ff-new-tab {
+    padding: 2px 8px;
+    font-size: 14px;
+    color: #666;
+    cursor: default;
+    align-self: center;
+  }
+
+  .ff-tabbar-space { flex: 1; }
+
+  .ff-window-buttons {
+    display: flex;
+    gap: 2px;
+    align-self: flex-start;
+    padding: 2px;
+  }
+
+  .ff-win-btn {
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    background: linear-gradient(180deg, #e8e6df, #d4d0c8);
+    border: 1px solid #8e8e8e;
+    color: #333;
+  }
+
+  .ff-win-close {
+    background: linear-gradient(180deg, #e66, #c44);
+    color: #fff;
+  }
+
+  /* Nav bar */
+  .ff-navbar {
+    display: flex;
+    align-items: center;
+    padding: 3px 4px;
+    background: #e8e6df;
+    border-top: 1px solid #8e8e8e;
+    border-bottom: 1px solid #d0cec6;
+    gap: 4px;
+  }
+
+  .ff-nav-buttons {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .ff-nav-btn {
+    width: 24px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #333;
+    background: linear-gradient(180deg, #f6f4ef, #dcdad3);
+    border: 1px solid #8e8e8e;
+    border-radius: 3px;
+    cursor: default;
+  }
+
+  .ff-nav-disabled {
+    opacity: 0.4;
+  }
+
+  .ff-urlbar {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #fff;
+    border: 1px solid #8e8e8e;
+    border-radius: 2px;
+    padding: 2px 6px;
+    min-width: 0;
+  }
+
+  .ff-urlbar-icon { flex-shrink: 0; }
+
+  .ff-url-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 11px;
+    color: #000;
+  }
+
+  .ff-searchbar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #fff;
+    border: 1px solid #8e8e8e;
+    border-radius: 2px;
+    padding: 2px 6px;
+    min-width: 60px;
+  }
+
+  .ff-search-icon { flex-shrink: 0; }
+
+  .ff-search-text {
+    font-size: 11px;
+    color: #999;
+  }
+
+  /* Bookmarks */
+  .ff-bookmarks {
+    padding: 2px 8px;
+    background: #e8e6df;
+    border-bottom: 1px solid #c0beb6;
+    font-size: 11px;
+    color: #333;
+  }
+
+  .ff-bm-item {
+    padding: 1px 4px;
+    font-size: 10px;
+    color: #666;
+  }
+
+  /* Content */
+  .ff-content {
+    background: #fff;
+    min-height: 60px;
+    line-height: 0;
+    overflow: hidden;
+  }
+
+  .ff-content :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Status bar */
+  .ff-statusbar {
+    padding: 2px 6px;
+    background: #e8e6df;
+    border-top: 1px solid #c0beb6;
+    font-size: 10px;
+    color: #666;
+  }
+</style>

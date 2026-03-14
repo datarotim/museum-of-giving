@@ -1,0 +1,254 @@
+---
+interface Props {
+  url?: string;
+  title?: string;
+}
+
+const { url = 'https://www.example.org', title = 'New Tab' } = Astro.props;
+---
+
+<div class="chrome-frame">
+  <!-- Tab bar -->
+  <div class="chrome-tabbar">
+    <div class="chrome-tab chrome-tab-active">
+      <div class="chrome-tab-favicon">
+        <svg viewBox="0 0 16 16" width="12" height="12">
+          <rect x="2" y="2" width="12" height="12" rx="2" fill="#e0e0e0" />
+          <circle cx="8" cy="8" r="3" fill="#bbb" />
+        </svg>
+      </div>
+      <span class="chrome-tab-title">{title}</span>
+      <div class="chrome-tab-close">
+        <svg viewBox="0 0 12 12" width="10" height="10">
+          <path d="M3 3l6 6M9 3l-6 6" stroke="#666" stroke-width="1.2" />
+        </svg>
+      </div>
+    </div>
+    <div class="chrome-new-tab">
+      <svg viewBox="0 0 12 12" width="11" height="11">
+        <path d="M6 1v10M1 6h10" stroke="#666" stroke-width="1.5" />
+      </svg>
+    </div>
+    <div class="chrome-tabbar-space"></div>
+    <div class="chrome-window-controls">
+      <div class="chrome-wc chrome-wc-min">
+        <svg viewBox="0 0 12 12" width="10" height="10">
+          <path d="M2 6h8" stroke="#555" stroke-width="1" />
+        </svg>
+      </div>
+      <div class="chrome-wc chrome-wc-max">
+        <svg viewBox="0 0 12 12" width="10" height="10">
+          <rect x="2" y="2" width="8" height="8" rx="0.5" stroke="#555" stroke-width="1" fill="none" />
+        </svg>
+      </div>
+      <div class="chrome-wc chrome-wc-close">
+        <svg viewBox="0 0 12 12" width="10" height="10">
+          <path d="M3 3l6 6M9 3l-6 6" stroke="#555" stroke-width="1" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Omnibox bar -->
+  <div class="chrome-navbar">
+    <div class="chrome-nav-buttons">
+      <div class="chrome-nav-btn">
+        <svg viewBox="0 0 16 16" width="14" height="14">
+          <path d="M10 3L5 8l5 5" stroke="#444" stroke-width="1.5" fill="none" />
+        </svg>
+      </div>
+      <div class="chrome-nav-btn chrome-nav-disabled">
+        <svg viewBox="0 0 16 16" width="14" height="14">
+          <path d="M6 3l5 5-5 5" stroke="#ccc" stroke-width="1.5" fill="none" />
+        </svg>
+      </div>
+      <div class="chrome-nav-btn">
+        <svg viewBox="0 0 16 16" width="14" height="14">
+          <path d="M3 8a5 5 0 019-3" stroke="#444" stroke-width="1.5" fill="none" />
+          <path d="M12 2v4h-4" stroke="#444" stroke-width="1.5" fill="none" />
+        </svg>
+      </div>
+    </div>
+    <div class="chrome-omnibox">
+      <div class="chrome-omni-lock">
+        <svg viewBox="0 0 12 14" width="10" height="12">
+          <rect x="2" y="6" width="8" height="6" rx="1" fill="#5a5a5a" />
+          <path d="M4 6V4.5a2 2 0 014 0V6" stroke="#5a5a5a" stroke-width="1.2" fill="none" />
+        </svg>
+      </div>
+      <span class="chrome-url">{url}</span>
+    </div>
+    <div class="chrome-nav-btn">
+      <svg viewBox="0 0 16 16" width="14" height="14">
+        <circle cx="4" cy="8" r="1.2" fill="#444" />
+        <circle cx="8" cy="8" r="1.2" fill="#444" />
+        <circle cx="12" cy="8" r="1.2" fill="#444" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="chrome-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .chrome-frame {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #dadce0;
+    border-radius: 8px 8px 0 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+  }
+
+  /* Tab bar */
+  .chrome-tabbar {
+    display: flex;
+    align-items: flex-end;
+    padding: 8px 8px 0;
+    background: #dee1e6;
+    gap: 0;
+    height: 38px;
+  }
+
+  .chrome-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    max-width: 220px;
+    min-width: 0;
+    border-radius: 8px 8px 0 0;
+    background: transparent;
+    cursor: default;
+    height: 30px;
+  }
+
+  .chrome-tab-active {
+    background: #fff;
+  }
+
+  .chrome-tab-favicon {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+  }
+
+  .chrome-tab-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    color: #333;
+  }
+
+  .chrome-tab-close {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .chrome-new-tab {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    align-self: center;
+    margin-left: 4px;
+  }
+
+  .chrome-tabbar-space { flex: 1; }
+
+  .chrome-window-controls {
+    display: flex;
+    gap: 0;
+    align-self: flex-start;
+    padding-top: 2px;
+  }
+
+  .chrome-wc {
+    width: 32px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Navbar / Omnibox */
+  .chrome-navbar {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px 6px;
+    background: #fff;
+    gap: 4px;
+  }
+
+  .chrome-nav-buttons {
+    display: flex;
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .chrome-nav-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: default;
+  }
+
+  .chrome-nav-disabled {
+    opacity: 0.4;
+  }
+
+  .chrome-omnibox {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f3f4;
+    border-radius: 24px;
+    padding: 6px 12px;
+    min-width: 0;
+  }
+
+  .chrome-omni-lock {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .chrome-url {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    color: #333;
+  }
+
+  /* Content */
+  .chrome-content {
+    background: #fff;
+    min-height: 60px;
+    line-height: 0;
+    overflow: hidden;
+  }
+
+  .chrome-content :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

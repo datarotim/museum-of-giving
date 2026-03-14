@@ -1,0 +1,207 @@
+---
+import OrnateFrame from './frames/OrnateFrame.astro';
+import NewsprintFrame from './frames/NewsprintFrame.astro';
+import EnvelopeFrame from './frames/EnvelopeFrame.astro';
+import CrtFrame from './frames/CrtFrame.astro';
+import NetscapeFrame from './frames/NetscapeFrame.astro';
+import IeFrame from './frames/IeFrame.astro';
+import FirefoxFrame from './frames/FirefoxFrame.astro';
+import ChromeFrame from './frames/ChromeFrame.astro';
+import IphoneFrame from './frames/IphoneFrame.astro';
+import SmsBubbleFrame from './frames/SmsBubbleFrame.astro';
+import ChannelChip from './ChannelChip.astro';
+
+interface Props {
+  exhibit?: any;
+  title?: string;
+  org?: string;
+  year?: number;
+  notable?: string;
+  frameStyle?: string;
+  image?: string;
+  url?: string;
+  channels?: string[];
+  slug?: string;
+}
+
+const props = Astro.props;
+const exhibit = props.exhibit;
+const title = exhibit?.data?.title ?? props.title ?? '';
+const org = exhibit?.data?.org ?? props.org ?? '';
+const year = exhibit?.data?.year ?? props.year ?? 0;
+const notable = exhibit?.data?.notable ?? props.notable;
+const frameStyle = exhibit?.data?.frameStyle ?? props.frameStyle ?? 'ornate';
+const image = exhibit?.data?.image ?? props.image;
+const url = exhibit?.data?.sourceUrl ?? props.url;
+const channels = exhibit?.data?.channels ?? props.channels ?? [];
+const slug = exhibit?.id ?? props.slug;
+
+const frameComponents: Record<string, any> = {
+  ornate: OrnateFrame,
+  newsprint: NewsprintFrame,
+  envelope: EnvelopeFrame,
+  'crt-tv': CrtFrame,
+  netscape: NetscapeFrame,
+  ie: IeFrame,
+  firefox: FirefoxFrame,
+  chrome: ChromeFrame,
+  iphone: IphoneFrame,
+  'sms-bubble': SmsBubbleFrame,
+};
+
+const FrameComponent = frameComponents[frameStyle] || OrnateFrame;
+
+// Determine frame props
+const frameProps: Record<string, string> = {};
+if (url) frameProps.url = url;
+if (title) frameProps.title = title;
+---
+
+<article
+  class="exhibit-card gallery-item"
+  data-exhibit-slug={slug}
+  data-exhibit-title={title}
+  data-exhibit-org={org}
+  data-exhibit-year={year}
+  data-exhibit-frame={frameStyle}
+  data-exhibit-image={image}
+  data-exhibit-url={url}
+  role="button"
+  tabindex="0"
+>
+  <div class="exhibit-frame-area">
+    <FrameComponent {...frameProps}>
+      {image ? (
+        <img src={image} alt={`${title} — ${org}, ${year}`} loading="lazy" />
+      ) : (
+        <div class="exhibit-placeholder">
+          <span class="exhibit-placeholder-year">{year}</span>
+          <span class="exhibit-placeholder-title">{title}</span>
+        </div>
+      )}
+    </FrameComponent>
+  </div>
+
+  <div class="exhibit-placard">
+    <div class="exhibit-placard-header">
+      <span class="exhibit-org">{org}</span>
+      <span class="exhibit-year">{year}</span>
+    </div>
+    {notable && (
+      <p class="exhibit-notable">{notable}</p>
+    )}
+    {channels.length > 0 && (
+      <div class="exhibit-channels">
+        {channels.map((ch) => (
+          <ChannelChip channel={ch} />
+        ))}
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  .exhibit-card {
+    flex-shrink: 0;
+    width: 280px;
+    scroll-snap-align: start;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    outline: none;
+  }
+
+  @media (min-width: 640px) {
+    .exhibit-card {
+      width: 320px;
+    }
+  }
+
+  .exhibit-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .exhibit-card:focus-visible {
+    outline: 2px solid var(--color-museum-accent);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  .exhibit-frame-area {
+    margin-bottom: 12px;
+  }
+
+  /* Museum placard */
+  .exhibit-placard {
+    padding: 0 4px;
+  }
+
+  .exhibit-placard-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .exhibit-org {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-museum-text);
+    letter-spacing: 0.02em;
+  }
+
+  .exhibit-year {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-museum-muted);
+    flex-shrink: 0;
+  }
+
+  .exhibit-notable {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--color-museum-muted);
+    line-height: 1.45;
+    margin: 0 0 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .exhibit-channels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* Placeholder when no image */
+  .exhibit-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    background: linear-gradient(135deg, #f8f7f4, #eeeae4);
+    min-height: 160px;
+    text-align: center;
+    gap: 6px;
+  }
+
+  .exhibit-placeholder-year {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--color-museum-muted);
+    opacity: 0.4;
+  }
+
+  .exhibit-placeholder-title {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    color: var(--color-museum-muted);
+    max-width: 200px;
+    line-height: 1.3;
+  }
+</style>

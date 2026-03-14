@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+import SubmitForm from '../components/SubmitForm.tsx';
+---
+
+<Layout title="Submit an Artifact — Museum of Giving" description="Submit a fundraising artifact to the Museum of Giving.">
+  <main class="max-w-2xl mx-auto px-6">
+    <!-- Back link -->
+    <nav class="pt-8 pb-4">
+      <a
+        href="/"
+        class="text-museum-muted text-sm hover:text-museum-text transition-colors inline-flex items-center gap-1"
+      >
+        <span>&larr;</span> Museum
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="pb-10 pt-4">
+      <h1 class="font-display text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+        Submit an Artifact
+      </h1>
+      <p class="text-museum-muted text-lg leading-relaxed">
+        Found an old donation page, a charity letter from the 1970s, or a telethon screenshot? We want to preserve it. Anything that shows how nonprofits have asked the world for help belongs here.
+      </p>
+    </header>
+
+    <!-- Form -->
+    <div class="pb-16">
+      <SubmitForm client:load />
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

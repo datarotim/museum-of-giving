@@ -1,0 +1,355 @@
+---
+interface Props {
+  url?: string;
+  title?: string;
+}
+
+const { url = 'http://www.example.org/', title = 'Internet Explorer' } = Astro.props;
+---
+
+<div class="ie-frame">
+  <!-- Title bar -->
+  <div class="ie-titlebar">
+    <div class="ie-titlebar-icon">
+      <div class="ie-e-icon">e</div>
+    </div>
+    <div class="ie-titlebar-text">{title} - Microsoft Internet Explorer</div>
+    <div class="ie-titlebar-buttons">
+      <div class="ie-titlebar-btn ie-btn-min">
+        <div class="ie-min-icon"></div>
+      </div>
+      <div class="ie-titlebar-btn ie-btn-max">
+        <div class="ie-max-icon"></div>
+      </div>
+      <div class="ie-titlebar-btn ie-btn-close">&#10005;</div>
+    </div>
+  </div>
+
+  <!-- Menu bar -->
+  <div class="ie-menubar">
+    <span>File</span>
+    <span>Edit</span>
+    <span>View</span>
+    <span>Favorites</span>
+    <span>Tools</span>
+    <span>Help</span>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="ie-toolbar">
+    <div class="ie-toolbar-buttons">
+      <div class="ie-tool-btn">
+        <div class="ie-tool-arrow">&#9664;</div>
+        <span>Back</span>
+      </div>
+      <div class="ie-tool-btn ie-tool-disabled">
+        <div class="ie-tool-arrow">&#9654;</div>
+      </div>
+      <div class="ie-tool-sep"></div>
+      <div class="ie-tool-btn">
+        <span>&#9744;</span>
+        <span>Stop</span>
+      </div>
+      <div class="ie-tool-btn">
+        <span>&#8635;</span>
+        <span>Refresh</span>
+      </div>
+      <div class="ie-tool-btn">
+        <span>&#8962;</span>
+        <span>Home</span>
+      </div>
+    </div>
+    <div class="ie-logo">
+      <div class="ie-logo-flag">
+        <div class="ie-flag-r"></div>
+        <div class="ie-flag-g"></div>
+        <div class="ie-flag-b"></div>
+        <div class="ie-flag-y"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Address bar -->
+  <div class="ie-addressbar">
+    <span class="ie-address-label">Address</span>
+    <div class="ie-address-input">
+      <div class="ie-page-icon">
+        <svg viewBox="0 0 12 14" width="10" height="12">
+          <rect x="1" y="1" width="8" height="11" rx="1" fill="#fff" stroke="#888" stroke-width="0.8" />
+          <line x1="3" y1="4" x2="7" y2="4" stroke="#4a90d9" stroke-width="0.6" />
+          <line x1="3" y1="6" x2="7" y2="6" stroke="#4a90d9" stroke-width="0.6" />
+          <line x1="3" y1="8" x2="6" y2="8" stroke="#4a90d9" stroke-width="0.6" />
+        </svg>
+      </div>
+      <span>{url}</span>
+    </div>
+    <div class="ie-go-btn">Go</div>
+  </div>
+
+  <!-- Content -->
+  <div class="ie-content">
+    <slot />
+  </div>
+
+  <!-- Status bar -->
+  <div class="ie-statusbar">
+    <div class="ie-status-left">
+      <span class="ie-status-icon">&#128274;</span>
+      <span>Done</span>
+    </div>
+    <div class="ie-status-right">
+      <span>Internet</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ie-frame {
+    width: 100%;
+    border: 2px outset #dfdfdf;
+    background: #ece9d8;
+    font-family: 'Tahoma', 'MS Sans Serif', 'Arial', sans-serif;
+    font-size: 11px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Title bar - XP blue gradient */
+  .ie-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 4px;
+    background: linear-gradient(180deg, #0a246a 0%, #3a6ea5 6%, #3a6ea5 90%, #0a246a 100%);
+    color: #fff;
+    font-weight: bold;
+    font-size: 11px;
+  }
+
+  .ie-titlebar-icon {
+    flex-shrink: 0;
+  }
+
+  .ie-e-icon {
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #4fc3f7, #2196f3);
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+  }
+
+  .ie-titlebar-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ie-titlebar-buttons {
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .ie-titlebar-btn {
+    width: 21px;
+    height: 21px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(180deg, #5c96d4, #3c7ec4);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
+  .ie-btn-close {
+    background: linear-gradient(180deg, #d46c5c, #c44c3c);
+  }
+
+  .ie-min-icon {
+    width: 8px;
+    height: 2px;
+    background: #fff;
+    margin-top: 6px;
+  }
+
+  .ie-max-icon {
+    width: 9px;
+    height: 7px;
+    border: 1.5px solid #fff;
+    border-top-width: 2px;
+  }
+
+  /* Menu bar */
+  .ie-menubar {
+    display: flex;
+    padding: 1px 4px;
+    background: #ece9d8;
+    border-bottom: 1px solid #aca899;
+    font-size: 11px;
+    color: #000;
+  }
+
+  .ie-menubar span {
+    padding: 1px 6px;
+  }
+
+  /* Toolbar */
+  .ie-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    background: #ece9d8;
+    border-bottom: 1px solid #aca899;
+  }
+
+  .ie-toolbar-buttons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .ie-tool-btn {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 4px;
+    font-size: 11px;
+    color: #000;
+    cursor: default;
+  }
+
+  .ie-tool-arrow {
+    font-size: 10px;
+    color: #006600;
+  }
+
+  .ie-tool-disabled {
+    opacity: 0.4;
+  }
+
+  .ie-tool-sep {
+    width: 1px;
+    height: 20px;
+    background: #aca899;
+    margin: 0 2px;
+  }
+
+  .ie-logo {
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+
+  .ie-logo-flag {
+    width: 20px;
+    height: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px;
+    transform: rotate(0deg);
+    padding: 2px;
+  }
+
+  .ie-flag-r { background: #f44336; border-radius: 1px; }
+  .ie-flag-g { background: #4caf50; border-radius: 1px; }
+  .ie-flag-b { background: #2196f3; border-radius: 1px; }
+  .ie-flag-y { background: #ffeb3b; border-radius: 1px; }
+
+  /* Address bar */
+  .ie-addressbar {
+    display: flex;
+    align-items: center;
+    padding: 2px 4px;
+    background: #ece9d8;
+    border-bottom: 1px solid #aca899;
+    gap: 4px;
+  }
+
+  .ie-address-label {
+    font-size: 11px;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .ie-address-input {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #7f9db9;
+    padding: 1px 4px;
+    font-size: 11px;
+    color: #000;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .ie-page-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .ie-go-btn {
+    padding: 1px 8px;
+    background: #ece9d8;
+    border: 1px outset #dfdfdf;
+    font-size: 11px;
+    color: #000;
+    cursor: default;
+    flex-shrink: 0;
+  }
+
+  /* Content */
+  .ie-content {
+    background: #fff;
+    min-height: 60px;
+    line-height: 0;
+    overflow: hidden;
+  }
+
+  .ie-content :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Status bar */
+  .ie-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1px 4px;
+    background: #ece9d8;
+    border-top: 1px solid #aca899;
+    font-size: 10px;
+    color: #000;
+  }
+
+  .ie-status-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-right: 1px solid #aca899;
+    padding-right: 8px;
+  }
+
+  .ie-status-icon {
+    font-size: 10px;
+  }
+
+  .ie-status-right {
+    padding: 0 4px;
+  }
+</style>

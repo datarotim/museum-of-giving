@@ -1,0 +1,25 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  era: string;
+  description: string;
+}
+
+const { slug, title, era, description } = Astro.props;
+---
+
+<a
+  href={`/room/${slug}`}
+  class="group block border border-museum-border rounded-sm p-6 sm:p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-white"
+>
+  <span class="block font-mono text-xs text-museum-muted tracking-widest uppercase mb-3">
+    {era}
+  </span>
+  <h3 class="font-display text-xl sm:text-2xl font-semibold mb-3 group-hover:text-museum-accent transition-colors">
+    {title}
+  </h3>
+  <p class="text-museum-muted text-sm leading-relaxed">
+    {description}
+  </p>
+</a>
