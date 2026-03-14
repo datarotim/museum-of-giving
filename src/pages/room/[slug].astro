@@ -136,7 +136,7 @@ const lightboxExhibits = JSON.stringify(
   <Footer />
 
   <!-- Lightbox overlay -->
-  <Lightbox client:load exhibits={lightboxExhibits} initialIndex={0} />
+  <Lightbox client:idle exhibits={lightboxExhibits} initialIndex={0} />
 
   <script>
     // Wire exhibit card clicks to lightbox

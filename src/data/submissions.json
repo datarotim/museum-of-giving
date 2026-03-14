@@ -1,0 +1,11 @@
+[
+  {
+    "orgName": "Test Org",
+    "year": 2020,
+    "imageUrl": "https://example.com/test.jpg",
+    "notable": "A test artifact",
+    "submitterName": "QA Tester",
+    "submitterEmail": "qa@test.com",
+    "submittedAt": "2026-03-14T16:55:28.101Z"
+  }
+]
