@@ -28,7 +28,7 @@ async function readSubmissions(): Promise<Submission[]> {
 
 async function writeSubmissions(submissions: Submission[]): Promise<void> {
   await put(BLOB_KEY, JSON.stringify(submissions, null, 2), {
-    access: 'public',
+    access: 'private',
     addRandomSuffix: false,
   });
 }
