@@ -17,6 +17,12 @@ pnpm-debug.log*
 .env
 .env.production
 
+# vercel build output
+.vercel/
+
+# gstack browse logs
+.gstack/
+
 # macOS-specific files
 .DS_Store
 
