@@ -1,7 +1,5 @@
 import type { APIRoute } from 'astro';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { put, list } from '@vercel/blob';
 
 export const prerender = false;
 
@@ -15,21 +13,24 @@ interface Submission {
   submittedAt: string;
 }
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const SUBMISSIONS_PATH = join(__dirname, '..', '..', 'data', 'submissions.json');
+const BLOB_KEY = 'submissions.json';
 
 async function readSubmissions(): Promise<Submission[]> {
   try {
-    const data = await readFile(SUBMISSIONS_PATH, 'utf-8');
-    return JSON.parse(data);
+    const { blobs } = await list({ prefix: BLOB_KEY });
+    if (blobs.length === 0) return [];
+    const res = await fetch(blobs[0].url);
+    return await res.json();
   } catch {
     return [];
   }
 }
 
 async function writeSubmissions(submissions: Submission[]): Promise<void> {
-  await mkdir(dirname(SUBMISSIONS_PATH), { recursive: true });
-  await writeFile(SUBMISSIONS_PATH, JSON.stringify(submissions, null, 2), 'utf-8');
+  await put(BLOB_KEY, JSON.stringify(submissions, null, 2), {
+    access: 'public',
+    addRandomSuffix: false,
+  });
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -38,7 +39,6 @@ export const POST: APIRoute = async ({ request }) => {
 
     const { orgName, year, imageUrl, notable, submitterName, submitterEmail } = body;
 
-    // Validate required fields
     const errors: string[] = [];
     if (!orgName || typeof orgName !== 'string') errors.push('orgName is required');
     if (!year || typeof year !== 'number') errors.push('year is required and must be a number');
