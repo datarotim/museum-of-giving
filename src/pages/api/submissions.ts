@@ -11,12 +11,16 @@ export const GET: APIRoute = async () => {
         headers: { 'Content-Type': 'application/json' },
       });
     }
-    const res = await fetch(blobs[0].url);
+    // Use downloadUrl for private stores (includes auth token)
+    const downloadUrl = blobs[0].downloadUrl;
+    const res = await fetch(downloadUrl);
     const data = await res.json();
     return new Response(JSON.stringify(data), {
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch {
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    console.error('Submissions read error:', message);
     return new Response(JSON.stringify([]), {
       headers: { 'Content-Type': 'application/json' },
     });
