@@ -1,37 +1,7 @@
 import type { APIRoute } from 'astro';
-import { put, list } from '@vercel/blob';
+import { put } from '@vercel/blob';
 
 export const prerender = false;
-
-interface Submission {
-  orgName: string;
-  year: number;
-  imageUrl: string;
-  notable: string;
-  submitterName: string;
-  submitterEmail: string;
-  submittedAt: string;
-}
-
-const BLOB_KEY = 'submissions.json';
-
-async function readSubmissions(): Promise<Submission[]> {
-  try {
-    const { blobs } = await list({ prefix: BLOB_KEY });
-    if (blobs.length === 0) return [];
-    const res = await fetch(blobs[0].downloadUrl);
-    return await res.json();
-  } catch {
-    return [];
-  }
-}
-
-async function writeSubmissions(submissions: Submission[]): Promise<void> {
-  await put(BLOB_KEY, JSON.stringify(submissions, null, 2), {
-    access: 'private',
-    addRandomSuffix: false,
-  });
-}
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -54,7 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    const submission: Submission = {
+    const submission = {
       orgName: orgName.trim(),
       year,
       imageUrl: imageUrl.trim(),
@@ -64,9 +34,12 @@ export const POST: APIRoute = async ({ request }) => {
       submittedAt: new Date().toISOString(),
     };
 
-    const submissions = await readSubmissions();
-    submissions.push(submission);
-    await writeSubmissions(submissions);
+    // Store each submission as its own blob with a unique name
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    await put(`submissions/${id}.json`, JSON.stringify(submission), {
+      access: 'private',
+      addRandomSuffix: false,
+    });
 
     return new Response(
       JSON.stringify({ success: true, message: 'Submission received. Thank you!' }),

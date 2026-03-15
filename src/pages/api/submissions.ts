@@ -5,17 +5,27 @@ export const prerender = false;
 
 export const GET: APIRoute = async () => {
   try {
-    const { blobs } = await list({ prefix: 'submissions.json' });
+    const { blobs } = await list({ prefix: 'submissions/' });
     if (blobs.length === 0) {
       return new Response(JSON.stringify([]), {
         headers: { 'Content-Type': 'application/json' },
       });
     }
-    // Use downloadUrl for private stores (includes auth token)
-    const downloadUrl = blobs[0].downloadUrl;
-    const res = await fetch(downloadUrl);
-    const data = await res.json();
-    return new Response(JSON.stringify(data), {
+
+    // Fetch each individual submission blob
+    const submissions = await Promise.all(
+      blobs.map(async (blob) => {
+        const res = await fetch(blob.downloadUrl);
+        return res.json();
+      })
+    );
+
+    // Sort newest first
+    submissions.sort((a, b) =>
+      new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+    );
+
+    return new Response(JSON.stringify(submissions), {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
