@@ -5,7 +5,8 @@ interface Exhibit {
   title: string;
   org: string;
   year: number;
-  image: string;
+  image?: string;
+  videoId?: string;
   notable: string;
   channels: string[];
   sourceUrl?: string;
@@ -173,13 +174,26 @@ export default function Lightbox({ exhibits: exhibitsJson, initialIndex }: Light
 
       {/* Content */}
       <div className="max-w-4xl w-full mx-4 sm:mx-8 max-h-[90vh] overflow-y-auto bg-white rounded-sm p-6 sm:p-10">
-        {/* Image */}
+        {/* Media */}
         <div className="flex justify-center mb-8">
-          <img
-            src={current.image}
-            alt={current.title}
-            className="max-w-full max-h-[50vh] object-contain"
-          />
+          {current.videoId ? (
+            <div className="w-full aspect-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${current.videoId}`}
+                title={current.title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+          ) : (
+            <img
+              src={current.image}
+              alt={current.title}
+              className="max-w-full max-h-[50vh] object-contain"
+            />
+          )}
         </div>
 
         {/* Info */}

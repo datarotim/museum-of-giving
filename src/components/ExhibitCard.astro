@@ -9,6 +9,7 @@ import FirefoxFrame from './frames/FirefoxFrame.astro';
 import ChromeFrame from './frames/ChromeFrame.astro';
 import IphoneFrame from './frames/IphoneFrame.astro';
 import SmsBubbleFrame from './frames/SmsBubbleFrame.astro';
+import ModernFrame from './frames/ModernFrame.astro';
 import ChannelChip from './ChannelChip.astro';
 
 interface Props {
@@ -19,6 +20,7 @@ interface Props {
   notable?: string;
   frameStyle?: string;
   image?: string;
+  videoId?: string;
   url?: string;
   channels?: string[];
   slug?: string;
@@ -32,9 +34,11 @@ const year = exhibit?.data?.year ?? props.year ?? 0;
 const notable = exhibit?.data?.notable ?? props.notable;
 const frameStyle = exhibit?.data?.frameStyle ?? props.frameStyle ?? 'ornate';
 const image = exhibit?.data?.image ?? props.image;
+const videoId = exhibit?.data?.videoId ?? props.videoId;
 const url = exhibit?.data?.sourceUrl ?? props.url;
 const channels = exhibit?.data?.channels ?? props.channels ?? [];
 const slug = exhibit?.id ?? props.slug;
+const thumbnail = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : undefined;
 
 const frameComponents: Record<string, any> = {
   ornate: OrnateFrame,
@@ -47,6 +51,7 @@ const frameComponents: Record<string, any> = {
   chrome: ChromeFrame,
   iphone: IphoneFrame,
   'sms-bubble': SmsBubbleFrame,
+  modern: ModernFrame,
 };
 
 const FrameComponent = frameComponents[frameStyle] || OrnateFrame;
@@ -65,13 +70,24 @@ if (title) frameProps.title = title;
   data-exhibit-year={year}
   data-exhibit-frame={frameStyle}
   data-exhibit-image={image}
+  data-exhibit-video={videoId}
   data-exhibit-url={url}
   role="button"
   tabindex="0"
 >
   <div class="exhibit-frame-area">
     <FrameComponent {...frameProps}>
-      {image ? (
+      {videoId ? (
+        <div class="exhibit-video-thumb">
+          <img src={thumbnail} alt={`${title} — ${org}, ${year}`} loading="lazy" />
+          <div class="exhibit-play-overlay">
+            <svg viewBox="0 0 68 48" width="68" height="48">
+              <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55C3.97 2.33 2.27 4.81 1.48 7.74.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/>
+              <path d="M45 24L27 14v20" fill="white"/>
+            </svg>
+          </div>
+        </div>
+      ) : image ? (
         <img src={image} alt={`${title} — ${org}, ${year}`} loading="lazy" />
       ) : (
         <div class="exhibit-placeholder">
@@ -174,6 +190,32 @@ if (title) frameProps.title = title;
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+  }
+
+  /* Video thumbnail with play button */
+  .exhibit-video-thumb {
+    position: relative;
+    line-height: 0;
+  }
+
+  .exhibit-video-thumb img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .exhibit-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.15);
+    transition: background 0.2s ease;
+  }
+
+  .exhibit-card:hover .exhibit-play-overlay {
+    background: rgba(0, 0, 0, 0.3);
   }
 
   /* Placeholder when no image */

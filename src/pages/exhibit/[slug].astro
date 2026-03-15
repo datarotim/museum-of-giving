@@ -55,16 +55,29 @@ const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encod
 
     <!-- Exhibit -->
     <article class="pb-16">
-      <!-- Image frame -->
+      <!-- Media frame -->
       <div class="mb-10 flex justify-center">
-        <div class="border border-museum-border p-2 sm:p-4 bg-museum-cream inline-block max-w-full">
-          <img
-            src={exhibit.data.image}
-            alt={exhibit.data.title}
-            class="max-w-full max-h-[70vh] object-contain"
-            loading="eager"
-          />
-        </div>
+        {exhibit.data.videoId ? (
+          <div class="w-full max-w-3xl aspect-video">
+            <iframe
+              src={`https://www.youtube.com/embed/${exhibit.data.videoId}`}
+              title={exhibit.data.title}
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              class="w-full h-full rounded-sm"
+            />
+          </div>
+        ) : (
+          <div class="border border-museum-border p-2 sm:p-4 bg-museum-cream inline-block max-w-full">
+            <img
+              src={exhibit.data.image}
+              alt={exhibit.data.title}
+              class="max-w-full max-h-[70vh] object-contain"
+              loading="eager"
+            />
+          </div>
+        )}
       </div>
 
       <!-- Placard -->
