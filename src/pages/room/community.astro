@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import SubmitCTA from '../../components/SubmitCTA.astro';
 import Footer from '../../components/Footer.astro';
 import ExhibitCard from '../../components/ExhibitCard.astro';
+import CommunitySubmissions from '../../components/CommunitySubmissions.tsx';
 import { getCollection } from 'astro:content';
 
 const allExhibits = await getCollection('exhibits');
@@ -38,19 +39,17 @@ const communityExhibits = allExhibits
       <SubmitCTA />
     </div>
 
-    <!-- Community exhibits grid -->
-    {communityExhibits.length > 0 ? (
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-16">
+    <!-- Community exhibits from MDX -->
+    {communityExhibits.length > 0 && (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pb-8">
         {communityExhibits.map((exhibit) => (
           <ExhibitCard exhibit={exhibit} />
         ))}
       </div>
-    ) : (
-      <div class="py-20 text-center">
-        <p class="text-museum-muted text-lg">No community submissions yet.</p>
-        <p class="text-museum-muted text-sm mt-2">Be the first to submit an artifact.</p>
-      </div>
     )}
+
+    <!-- Community submissions from Blob storage -->
+    <CommunitySubmissions client:load />
   </main>
 
   <Footer />
